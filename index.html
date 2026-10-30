@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="Europa 26" />
 <meta name="theme-color" content="#f6f2eb" />
-<title>Europa 26 — Mala & Looks</title>
+<title>Europa 26 — Mala & Logística</title>
 <style>
   :root{
     --bg:#f6f2eb; --paper:#fffdfa; --ink:#1c1b18; --muted:#7a756d; --line:#ded8ce;
@@ -136,7 +136,7 @@
 <div class="app">
   <section class="hero">
     <div class="card heroMain">
-      <div class="eyebrow">Packing system • Europa 2026</div>
+      <div class="eyebrow">Mala + logística • Europa 2026</div>
       <h1>EUROPA<br>26</h1>
       <div class="route">MADRID → PORTO → BERLIN → MADRID</div>
       <div class="heroStats">
@@ -181,7 +181,14 @@
     <div class="sectionHead">
       <div><h2>Minha mala</h2><p>Checklist mestre por categoria.</p></div>
     </div>
-    <div id="packingList"></div>
+    
+    <div class="card" style="padding:16px;margin-bottom:16px">
+      <div class="eyebrow">Mala-base</div>
+      <div class="small" style="line-height:1.7;margin-top:8px">
+        3 calças principais + 1 calça de moletom de voo • 3 camisetas • 2 mangas longas • 1 camisa/overshirt • 1–2 tricôs/suéteres • 1 casaco de moletom • 2 térmicas • 1 casaco principal • 1 impermeável/corta-vento • idealmente 2 pares de calçados • 8 cuecas • 7 meias normais • 2 meias quentes • 1 pijama.
+      </div>
+    </div>
+<div id="packingList"></div>
   </section>
 
   <section id="looks" class="panel">
@@ -211,7 +218,7 @@
   </section>
 
   <section id="race" class="panel">
-    <div class="sectionHead"><div><h2>Corrida — Porto</h2><p>08/11 • 08:00 • kit essencial não despachar.</p></div></div>
+    <div class="sectionHead"><div><h2>Corrida do pai — Porto</h2><p>08/11 • 08:00 • prova de 10 km do seu pai • kit essencial não despachar.</p></div></div>
     <div class="card" style="padding:16px">
       <h3>Checklist</h3>
       <div class="checkGroup" id="raceList"></div>
@@ -226,8 +233,39 @@
     </div>
   </section>
 
+  
+  <section id="speciallooks" class="panel">
+    <div class="sectionHead"><div><h2>Looks especiais</h2><p>Fórmulas de look ligadas ao roteiro real.</p></div></div>
+    <div class="grid">
+      <div class="card sim"><strong>✈️ Voo Rio → Madri</strong><div class="small" style="margin-top:8px">Camiseta + calça de moletom + casaco de moletom + tênis confortável. Casaco principal acessível.</div></div>
+      <div class="card sim"><strong>🏃 Corrida do pai</strong><div class="small" style="margin-top:8px">Kit completo na mochila. Pós-prova: camiseta seca + moletom + calça seca + meia seca + casaco.</div></div>
+      <div class="card sim"><strong>🖤 Tresor — 11/11</strong><div class="small" style="margin-top:8px">Calça preta + camiseta preta/neutra + camada térmica discreta se necessário + tênis confortável escuro + casaco quente para o deslocamento.</div></div>
+      <div class="card sim"><strong>🍸 Madri — 14/11</strong><div class="small" style="margin-top:8px">Calça preta + camisa/overshirt ou tricô bonito + calçado mais arrumado + casaco principal.</div></div>
+      <div class="card sim"><strong>✈️ Voo Madri → Rio</strong><div class="small" style="margin-top:8px">Camiseta + calça de moletom + casaco de moletom + tênis confortável.</div></div>
+    </div>
+  </section>
+
+  <section id="layers" class="panel">
+    <div class="sectionHead"><div><h2>Sistema de camadas</h2><p>Regra simples para adaptar a mesma mala a Madri, Porto e Berlim.</p></div></div>
+    <div class="grid">
+      <div class="card sim"><div class="eyebrow">Camada 1</div><strong>Base</strong><div class="small" style="margin-top:8px">Camiseta, manga longa ou segunda pele térmica. Em Berlim, a térmica ganha importância.</div></div>
+      <div class="card sim"><div class="eyebrow">Camada 2</div><strong>Aquecimento</strong><div class="small" style="margin-top:8px">Tricô, suéter, moletom ou overshirt. É a camada que você tira nos ambientes internos aquecidos.</div></div>
+      <div class="card sim"><div class="eyebrow">Camada 3</div><strong>Proteção</strong><div class="small" style="margin-top:8px">Casaco principal quente e/ou impermeável/corta-vento conforme frio, vento e chuva.</div></div>
+    </div>
+  </section>
+
   <section id="optimizer" class="panel">
     <div class="sectionHead"><div><h2>Otimizador de mala</h2><p>Veja peças com baixo aproveitamento e simule remover.</p></div></div>
+    <div class="card" style="padding:16px;margin-bottom:16px">
+      <strong>Regra de decisão</strong>
+      <div class="chips" style="margin-top:10px">
+        <span class="chip">JÁ NECESSÁRIO</span>
+        <span class="chip">PROVAVELMENTE NECESSÁRIO</span>
+        <span class="chip">OPCIONAL</span>
+        <span class="chip">CANDIDATO A FICAR</span>
+      </div>
+      <div class="small" style="margin-top:10px">Cada peça precisa justificar espaço por múltiplos usos, função climática, função específica ou valor real em um look importante.</div>
+    </div>
     <div class="grid" id="optimizerGrid"></div>
   </section>
 </div>
@@ -300,19 +338,40 @@ const defaultPacking = {
   'Farmácia':['Medicamentos pessoais','Analgésico / antitérmico habitual','Antialérgico habitual','Remédio habitual para enjoo','Band-Aid','Curativo para bolha','Antisséptico pequeno','Soro fisiológico','Pastilhas para garganta','Sais de reidratação']
 };
 const trip = [
-  ['05 NOV','Rio → Madri','Voo • moletom + casaco de moletom'],
-  ['06 NOV','Madri','Frio moderado • camadas leves'],
-  ['07 NOV','Madri → Porto','Voo • moletom + casaco de moletom'],
-  ['08 NOV','Porto','Corrida 08:00 • possível chuva'],
-  ['09 NOV','Porto → Berlim','Voo • moletom + casaco de moletom'],
-  ['10 NOV','Berlim','Frio • térmica + camada + casaco'],
-  ['11 NOV','Berlim','Frio • térmica + camada + casaco'],
-  ['12 NOV','Berlim','Frio / chuva • impermeável'],
-  ['13 NOV','Berlim → Madri','Voo • moletom + casaco de moletom'],
-  ['14 NOV','Madri','Frio moderado'],
-  ['15 NOV','Madri → Rio','Voo • moletom + casaco de moletom']
+  ['05 NOV','Rio → Madri','Voo • calça de moletom + casaco de moletom'],
+  ['06 NOV','Madri','Chegada • almoço • descanso • jantar • conforto'],
+  ['07 NOV','Madri → Porto','Centro histórico • kit da corrida • jantar cedo'],
+  ['08 NOV','Porto','10 km do pai às 08:00 • pós-prova • Foz / Parque da Cidade'],
+  ['09 NOV','Porto → Berlim','Chegada • Prenzlauer Berg • passeio leve'],
+  ['10 NOV','Berlim','Reichstag • Mitte • monumentos • museu • muita caminhada'],
+  ['11 NOV','Berlim','East Side Gallery • Friedrichshain • Kreuzberg • TRESOR à noite'],
+  ['12 NOV','Berlim','Brunch • bairro • design • cultura • dia mais leve'],
+  ['13 NOV','Berlim → Madri','Malasaña • Gran Vía • possível rooftop'],
+  ['14 NOV','Madri','Palacio Real • centro • Prado • Retiro • jantar/rooftop especial'],
+  ['15 NOV','Madri → Rio','Aeroporto • voo internacional • conforto']
 ];
-const raceItems=['Tênis da prova','Short','Camiseta / regata','Cueca esportiva','Meia da prova','Meia reserva','Relógio','Carregador','Boné / viseira','Corta-vento','Gel / carbo habitual','Anti-atrito','Saco para roupa molhada','Roupa seca pós-prova'];
+const raceItems=[
+'Tênis da prova',
+'Short',
+'Camiseta / regata',
+'Roupa íntima esportiva',
+'Meia da prova',
+'Meia reserva',
+'Número de peito',
+'Chip',
+'Documento',
+'Relógio',
+'Carregador do relógio',
+'Alimentação pré-prova habitual',
+'Hidratação',
+'Gel / carbo habitual (se usa)',
+'Proteção contra chuva / corta-vento',
+'Roupa seca pós-prova',
+'Meia seca pós-prova',
+'Casaco / moletom pós-prova',
+'Saco para roupa molhada',
+'Curativo para bolha'
+];
 const hotelItems=['Passaporte','Carteira','Celular','Carregador','Fones','Roupas conferidas','Banheiro conferido','Tomadas conferidas','Armários conferidos','Cama conferida'];
 
 function uid(){return Math.random().toString(36).slice(2,9)}
@@ -339,7 +398,18 @@ function utility(piece){
   return Math.max(10,Math.min(100, Math.round(uses*12 + city*8 + occ*5 + climate*4 + functional)));
 }
 function labelScore(s){return s>=75?'ESSENCIAL':s>=55?'ÚTIL':s>=35?'REAVALIAR':'CANDIDATA A FICAR'}
-const navItems=[['dashboard','Início'],['wardrobe','Peças'],['packing','Mala'],['looks','Looks'],['trip','Roteiro'],['race','Corrida'],['travelmode','Viagem'],['optimizer','Otimizar']];
+const navItems=[
+['dashboard','Início'],
+['wardrobe','Peças'],
+['packing','Mala'],
+['looks','Looks'],
+['speciallooks','Especiais'],
+['layers','Camadas'],
+['trip','Roteiro'],
+['race','Corrida'],
+['travelmode','Viagem'],
+['optimizer','Otimizar']
+];
 
 function buildNav(){
   const tabs=document.getElementById('tabs'), bottom=document.getElementById('bottomNav');
