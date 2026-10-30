@@ -1,0 +1,8 @@
+{
+  "name": "Europa 26 — Mala & Looks",
+  "short_name": "Europa 26",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f2eb",
+  "theme_color": "#f6f2eb"
+}

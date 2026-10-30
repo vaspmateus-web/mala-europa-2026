@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Europa 26" />
+<meta name="theme-color" content="#f6f2eb" />
+<title>Europa 26 — Mala & Looks</title>
+<style>
+  :root{
+    --bg:#f6f2eb; --paper:#fffdfa; --ink:#1c1b18; --muted:#7a756d; --line:#ded8ce;
+    --accent:#1c1b18; --ok:#2e7d32; --warn:#b26a00; --danger:#b33a3a; --blue:#2f5d8c;
+    --shadow:0 14px 40px rgba(34,28,18,.08); --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+  button,input,select,textarea{font:inherit}
+  button{cursor:pointer}
+  .app{max-width:1200px;margin:0 auto;padding:20px 18px 110px}
+  .hero{display:grid;grid-template-columns:1.5fr .8fr;gap:18px;margin-bottom:18px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .heroMain{padding:30px}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:clamp(44px,8vw,92px);line-height:.9;margin:10px 0 18px;letter-spacing:-.05em}
+  .route{font-size:14px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .heroStats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px}
+  .stat{padding:16px;border:1px solid var(--line);border-radius:16px;background:#fbf8f2}
+  .stat strong{display:block;font-size:28px}
+  .progressWrap{padding:26px;display:flex;flex-direction:column;justify-content:space-between}
+  .progress{height:12px;background:#e9e1d5;border-radius:99px;overflow:hidden}
+  .progress > span{display:block;height:100%;background:var(--ink);width:0%}
+  .tabs{display:flex;gap:8px;overflow:auto;padding:6px 0 18px;position:sticky;top:0;background:linear-gradient(var(--bg) 75%,transparent);z-index:20}
+  .tab{border:1px solid var(--line);background:var(--paper);padding:11px 15px;border-radius:999px;white-space:nowrap}
+  .tab.active{background:var(--ink);color:white}
+  .panel{display:none}.panel.active{display:block}
+  .sectionHead{display:flex;justify-content:space-between;gap:12px;align-items:end;margin:16px 0}
+  .sectionHead h2{margin:0;font-size:28px;letter-spacing:-.03em}
+  .sectionHead p{margin:4px 0 0;color:var(--muted)}
+  .btn{border:1px solid var(--line);background:var(--paper);padding:11px 14px;border-radius:12px}
+  .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.danger{color:var(--danger)}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .piece{overflow:hidden}
+  .pieceImg{aspect-ratio:4/3;background:#eee6da;display:flex;align-items:center;justify-content:center;color:var(--muted);overflow:hidden}
+  .pieceImg img{width:100%;height:100%;object-fit:cover}
+  .pieceBody{padding:16px}
+  .pieceTitle{display:flex;justify-content:space-between;gap:8px;align-items:start}
+  .pieceTitle h3{margin:0;font-size:18px}
+  .meta{font-size:13px;color:var(--muted);margin-top:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .chip{font-size:11px;padding:6px 8px;border:1px solid var(--line);border-radius:999px;background:#faf6ef}
+  .score{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .score strong{font-size:20px}
+  .statusRow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:12px}
+  select,input,textarea{width:100%;border:1px solid var(--line);background:#fff;padding:11px 12px;border-radius:12px}
+  textarea{min-height:90px;resize:vertical}
+  .formGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.36);display:none;align-items:flex-end;justify-content:center;z-index:50;padding:12px}
+  .modal.open{display:flex}
+  .sheet{background:var(--paper);width:min(720px,100%);max-height:92vh;overflow:auto;border-radius:24px;padding:20px}
+  .sheetHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .sheetHeader h3{margin:0}
+  .closer{border:0;background:transparent;font-size:26px}
+  .checkGroup{display:grid;gap:8px}
+  .checkItem{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:12px 14px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+  .checkItem input[type="checkbox"]{width:20px;height:20px}
+  .small{font-size:12px;color:var(--muted)}
+  .lookBuilder{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .lookPreview{padding:18px;min-height:360px}
+  .lookBoard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+  .lookTile{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#faf7f1}
+  .lookTile img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+  .lookTile div{padding:8px;font-size:12px}
+  .timeline{display:grid;gap:10px}
+  .day{padding:16px;display:grid;grid-template-columns:90px 1fr auto;gap:14px;align-items:center}
+  .day strong{font-size:18px}
+  .city{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .pill{padding:6px 9px;border-radius:999px;font-size:12px;background:#f0ebe3}
+  .kpiGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .kpi{padding:14px}.kpi strong{display:block;font-size:26px}
+  .sim{padding:16px}
+  .bottomNav{display:none}
+  @media(max-width:850px){
+    .hero{grid-template-columns:1fr}
+    .heroStats,.kpiGrid{grid-template-columns:repeat(2,1fr)}
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .lookBuilder{grid-template-columns:1fr}
+  }
+  @media(max-width:620px){
+    .app{padding:14px 12px 110px}
+    .heroMain,.progressWrap{padding:22px}
+    .grid{grid-template-columns:1fr}
+    .formGrid{grid-template-columns:1fr}
+    .tabs{display:none}
+    .bottomNav{display:grid;position:fixed;bottom:0;left:0;right:0;grid-template-columns:repeat(5,1fr);gap:2px;background:rgba(255,253,250,.96);border-top:1px solid var(--line);padding:7px 6px calc(7px + env(safe-area-inset-bottom));z-index:40}
+    .bottomNav button{border:0;background:transparent;padding:8px 2px;font-size:11px}
+    .bottomNav button.active{font-weight:700}
+    .day{grid-template-columns:70px 1fr}
+    .day .pill{grid-column:2}
+  }
+
+  @media(max-width:620px){
+    body{-webkit-text-size-adjust:100%;touch-action:manipulation}
+    button,input,select,textarea{font-size:16px}
+    .card{border-radius:18px}
+    .hero{gap:12px}
+    .heroMain,.progressWrap{padding:18px}
+    h1{font-size:56px}
+    .heroStats{gap:8px}
+    .stat{padding:12px}
+    .stat strong{font-size:24px}
+    .sectionHead{align-items:center;position:relative}
+    .sectionHead .btn.primary{min-height:46px}
+    .btn{min-height:44px;padding:11px 14px}
+    .pieceBody{padding:14px}
+    .statusRow{grid-template-columns:1fr 48px}
+    select,input,textarea{min-height:46px}
+    .checkItem{min-height:54px;padding:12px}
+    .checkItem input[type="checkbox"]{width:24px;height:24px}
+    .sheet{padding:18px 16px calc(18px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0}
+    .modal{padding:0;align-items:flex-end}
+    .pieceImg{aspect-ratio:1/1}
+    .lookBoard{grid-template-columns:repeat(2,1fr)}
+    .bottomNav{grid-template-columns:repeat(5,1fr);overflow-x:auto}
+    .bottomNav button{min-width:64px;min-height:52px}
+    .mobileHint{display:block}
+  }
+  @media(min-width:621px){.mobileHint{display:none}}
+
+</style>
+<link rel="manifest" href="manifest.webmanifest" />
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="card heroMain">
+      <div class="eyebrow">Packing system • Europa 2026</div>
+      <h1>EUROPA<br>26</h1>
+      <div class="route">MADRID → PORTO → BERLIN → MADRID</div>
+      <div class="heroStats">
+        <div class="stat"><span class="small">DIAS</span><strong>10</strong></div>
+        <div class="stat"><span class="small">CIDADES</span><strong>3</strong></div>
+        <div class="stat"><span class="small">CORRIDA</span><strong>1</strong></div>
+      </div>
+    </div>
+    <div class="card progressWrap">
+      <div>
+        <div class="eyebrow">Mala pronta</div>
+        <strong id="progressText" style="font-size:48px;display:block;margin:8px 0 14px">0%</strong>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+      <div class="small" style="margin-top:18px">05–15 NOV 2026 • clima por camadas • corrida no Porto</div>
+    </div>
+  </section>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <section id="dashboard" class="panel active">
+    <div class="sectionHead"><div><h2>Dashboard</h2><p>Visão rápida da mala e do que ainda falta.</p></div></div><div class="card mobileHint" style="padding:14px;margin-bottom:14px"><strong>Feito para o celular</strong><div class="small" style="margin-top:4px">Use a câmera para fotografar as peças, marque os status com um toque e navegue pela barra inferior.</div></div>
+    <div class="kpiGrid">
+      <div class="card kpi"><span class="small">PEÇAS</span><strong id="kPieces">0</strong></div>
+      <div class="card kpi"><span class="small">NA MALA</span><strong id="kPacked">0</strong></div>
+      <div class="card kpi"><span class="small">LOOKS</span><strong id="kLooks">0</strong></div>
+      <div class="card kpi"><span class="small">REAVALIAR</span><strong id="kReview">0</strong></div>
+    </div>
+    <div class="sectionHead"><div><h2>Próximos marcos</h2><p>Roteiro base da viagem.</p></div></div>
+    <div class="timeline" id="dashTimeline"></div>
+  </section>
+
+  <section id="wardrobe" class="panel">
+    <div class="sectionHead">
+      <div><h2>Meu armário</h2><p>Cadastre fotos e use as peças para montar looks.</p></div>
+      <button class="btn primary" onclick="openPieceModal()">+ Peça</button>
+    </div>
+    <div class="grid" id="pieceGrid"></div>
+  </section>
+
+  <section id="packing" class="panel">
+    <div class="sectionHead">
+      <div><h2>Minha mala</h2><p>Checklist mestre por categoria.</p></div>
+    </div>
+    <div id="packingList"></div>
+  </section>
+
+  <section id="looks" class="panel">
+    <div class="sectionHead">
+      <div><h2>Looks</h2><p>Monte combinações usando as peças cadastradas.</p></div>
+      <button class="btn primary" onclick="saveLook()">Salvar look</button>
+    </div>
+    <div class="lookBuilder">
+      <div class="card lookPreview">
+        <div class="formGrid">
+          <div><label class="small">Nome</label><input id="lookName" placeholder="Ex: Berlim — dia frio"></div>
+          <div><label class="small">Cidade</label><select id="lookCity"><option>Madri</option><option>Porto</option><option>Berlim</option><option>Avião</option></select></div>
+        </div>
+        <div style="margin-top:12px"><label class="small">Peças do look</label><div id="lookSelectors"></div></div>
+        <div class="lookBoard" id="lookBoard"></div>
+      </div>
+      <div>
+        <div class="sectionHead" style="margin-top:0"><div><h2 style="font-size:22px">Looks salvos</h2></div></div>
+        <div id="savedLooks"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="trip" class="panel">
+    <div class="sectionHead"><div><h2>Roteiro + clima</h2><p>Planejamento de camadas por cidade.</p></div></div>
+    <div class="timeline" id="tripTimeline"></div>
+  </section>
+
+  <section id="race" class="panel">
+    <div class="sectionHead"><div><h2>Corrida — Porto</h2><p>08/11 • 08:00 • kit essencial não despachar.</p></div></div>
+    <div class="card" style="padding:16px">
+      <h3>Checklist</h3>
+      <div class="checkGroup" id="raceList"></div>
+    </div>
+  </section>
+
+  <section id="travelmode" class="panel">
+    <div class="sectionHead"><div><h2>Modo viagem</h2><p>Use nas trocas de cidade e para conferir a hospedagem.</p></div></div>
+    <div class="card" style="padding:16px">
+      <h3>Antes de sair da hospedagem</h3>
+      <div class="checkGroup" id="hotelCheck"></div>
+    </div>
+  </section>
+
+  <section id="optimizer" class="panel">
+    <div class="sectionHead"><div><h2>Otimizador de mala</h2><p>Veja peças com baixo aproveitamento e simule remover.</p></div></div>
+    <div class="grid" id="optimizerGrid"></div>
+  </section>
+</div>
+
+<div class="bottomNav" id="bottomNav"></div>
+
+<div class="modal" id="pieceModal">
+  <div class="sheet">
+    <div class="sheetHeader"><h3 id="pieceModalTitle">Adicionar peça</h3><button class="closer" onclick="closePieceModal()">×</button></div>
+    <input type="hidden" id="pieceId">
+    <div class="formGrid">
+      <div><label class="small">Nome</label><input id="pieceName" placeholder="Jeans azul escuro"></div>
+      <div><label class="small">Categoria</label>
+        <select id="pieceCategory">
+          <option>Calça</option><option>Camiseta</option><option>Manga longa</option><option>Camisa/Overshirt</option>
+          <option>Tricô</option><option>Moletom</option><option>Térmica</option><option>Casaco</option><option>Tênis</option>
+          <option>Acessório</option><option>Corrida</option><option>Íntima</option><option>Outro</option>
+        </select>
+      </div>
+      <div><label class="small">Cor</label><input id="pieceColor" placeholder="Preto"></div>
+      <div><label class="small">Camada</label><select id="pieceLayer"><option>Base</option><option>Intermediária</option><option>Externa</option><option>Não se aplica</option></select></div>
+      <div><label class="small">Clima</label><select id="pieceClimate"><option>Ameno</option><option>Frio</option><option>Muito frio</option><option>Chuva</option><option>Todos</option></select></div>
+      <div><label class="small">Status</label>
+        <select id="pieceStatus">
+          <option>Não separado</option><option>Separado</option><option>Na mala</option><option>Na mochila</option>
+          <option>Vestir no avião</option><option>Em uso</option><option>Usado / sujo</option><option>Disponível</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:12px"><label class="small">Cidades (separe por vírgula)</label><input id="pieceCities" placeholder="Madri, Porto, Berlim"></div>
+    <div style="margin-top:12px"><label class="small">Ocasiões (separe por vírgula)</label><input id="pieceOccasions" placeholder="Passeio, noite, avião"></div>
+    <div style="margin-top:12px"><label class="small">Foto</label><input type="file" id="piecePhoto" accept="image/*" capture="environment"></div>
+    <div style="margin-top:12px"><label class="small">Observações</label><textarea id="pieceNotes"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:16px"><button class="btn primary" onclick="savePiece()">Salvar</button><button class="btn" onclick="closePieceModal()">Cancelar</button></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='europa26_mala_v1';
+
+const defaultPieces = [
+  ['Jeans escuro','Calça','Azul escuro','Base','Frio','Não separado',['Madri','Porto','Berlim'],['Passeio','Noite']],
+  ['Calça preta','Calça','Preto','Base','Frio','Não separado',['Madri','Porto','Berlim'],['Passeio','Restaurante','Noite']],
+  ['Calça casual confortável','Calça','Neutro','Base','Ameno','Não separado',['Madri','Porto','Berlim'],['Passeio','Caminhada']],
+  ['Calça de moletom','Calça','Neutro','Base','Todos','Vestir no avião',['Madri','Porto','Berlim'],['Avião','Aeroporto']],
+  ['Camiseta neutra 1','Camiseta','Neutro','Base','Todos','Não separado',['Madri','Porto','Berlim'],['Passeio','Avião']],
+  ['Camiseta neutra 2','Camiseta','Neutro','Base','Todos','Não separado',['Madri','Porto','Berlim'],['Passeio']],
+  ['Camiseta diferente','Camiseta','Cor/estampa','Base','Ameno','Não separado',['Madri','Porto'],['Passeio','Noite']],
+  ['Manga longa 1','Manga longa','Neutro','Base','Frio','Não separado',['Madri','Porto','Berlim'],['Passeio']],
+  ['Manga longa 2','Manga longa','Neutro','Base','Frio','Não separado',['Madri','Porto','Berlim'],['Passeio']],
+  ['Camisa / Overshirt','Camisa/Overshirt','Neutro','Intermediária','Ameno','Não separado',['Madri','Porto'],['Restaurante','Noite','Passeio']],
+  ['Tricô / Suéter','Tricô','Neutro','Intermediária','Frio','Não separado',['Madri','Porto','Berlim'],['Passeio','Noite']],
+  ['Casaco de moletom','Moletom','Neutro','Intermediária','Frio','Vestir no avião',['Madri','Porto','Berlim'],['Avião','Casual']],
+  ['Térmica 1','Térmica','Neutro','Base','Muito frio','Não separado',['Berlim'],['Passeio']],
+  ['Térmica 2','Térmica','Neutro','Base','Muito frio','Não separado',['Berlim'],['Passeio']],
+  ['Casaco principal quente','Casaco','Neutro','Externa','Muito frio','Não separado',['Madri','Berlim'],['Passeio','Noite']],
+  ['Impermeável / Corta-vento','Casaco','Neutro','Externa','Chuva','Não separado',['Porto','Berlim'],['Passeio','Corrida']],
+  ['Tênis caminhada','Tênis','Neutro','Não se aplica','Todos','Vestir no avião',['Madri','Porto','Berlim'],['Passeio','Avião']],
+  ['Tênis corrida','Tênis','Esportivo','Não se aplica','Todos','Na mochila',['Porto'],['Corrida']],
+  ['Cachecol','Acessório','Neutro','Não se aplica','Muito frio','Não separado',['Berlim','Madri'],['Passeio']],
+  ['Gorro','Acessório','Neutro','Não se aplica','Muito frio','Não separado',['Berlim'],['Passeio']],
+  ['Luvas finas','Acessório','Neutro','Não se aplica','Muito frio','Não separado',['Berlim'],['Passeio']],
+];
+const defaultPacking = {
+  'Íntimas':['8 cuecas','7 meias normais','2 meias quentes','2 meias de corrida','1 roupa de dormir'],
+  'Acessórios':['Cinto','Óculos de sol','Guarda-chuva compacto','Bolsa transversal / pochete','Boné / viseira'],
+  'Higiene':['Escova + pasta','Desodorante','Sabonete facial','Hidratante','Protetor solar','Lip balm','Shampoo / condicionador','Produto de cabelo','Aparelho de barbear','Perfume pequeno'],
+  'Eletrônicos':['Celular','Apple Watch / relógio','Fones','Power bank','Carregador multiporta','Cabo do celular','Cabo do relógio','Adaptador europeu'],
+  'Documentos':['Passaporte','Cartões','Seguro viagem','Reservas','Passagens','Confirmação da corrida','Backups offline'],
+  'Farmácia':['Medicamentos pessoais','Analgésico / antitérmico habitual','Antialérgico habitual','Remédio habitual para enjoo','Band-Aid','Curativo para bolha','Antisséptico pequeno','Soro fisiológico','Pastilhas para garganta','Sais de reidratação']
+};
+const trip = [
+  ['05 NOV','Rio → Madri','Voo • moletom + casaco de moletom'],
+  ['06 NOV','Madri','Frio moderado • camadas leves'],
+  ['07 NOV','Madri → Porto','Voo • moletom + casaco de moletom'],
+  ['08 NOV','Porto','Corrida 08:00 • possível chuva'],
+  ['09 NOV','Porto → Berlim','Voo • moletom + casaco de moletom'],
+  ['10 NOV','Berlim','Frio • térmica + camada + casaco'],
+  ['11 NOV','Berlim','Frio • térmica + camada + casaco'],
+  ['12 NOV','Berlim','Frio / chuva • impermeável'],
+  ['13 NOV','Berlim → Madri','Voo • moletom + casaco de moletom'],
+  ['14 NOV','Madri','Frio moderado'],
+  ['15 NOV','Madri → Rio','Voo • moletom + casaco de moletom']
+];
+const raceItems=['Tênis da prova','Short','Camiseta / regata','Cueca esportiva','Meia da prova','Meia reserva','Relógio','Carregador','Boné / viseira','Corta-vento','Gel / carbo habitual','Anti-atrito','Saco para roupa molhada','Roupa seca pós-prova'];
+const hotelItems=['Passaporte','Carteira','Celular','Carregador','Fones','Roupas conferidas','Banheiro conferido','Tomadas conferidas','Armários conferidos','Cama conferida'];
+
+function uid(){return Math.random().toString(36).slice(2,9)}
+function initialState(){
+  return {
+    pieces: defaultPieces.map((p,i)=>({id:uid(),name:p[0],category:p[1],color:p[2],layer:p[3],climate:p[4],status:p[5],cities:p[6],occasions:p[7],notes:'',photo:''})),
+    packingChecks:{}, raceChecks:{}, hotelChecks:{}, looks:[]
+  }
+}
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY)||'null') || initialState();
+function save(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  }catch(e){
+    alert('O armazenamento do navegador ficou cheio. Tente remover fotos antigas ou usar imagens menores.');
+  }
+  renderAll()
+}
+function utility(piece){
+  const uses=state.looks.filter(l=>l.pieceIds.includes(piece.id)).length;
+  const city=piece.cities.length, occ=piece.occasions.length;
+  let climate=piece.climate==='Todos'?4:piece.climate==='Muito frio'||piece.climate==='Chuva'?3:2;
+  let functional=(piece.category==='Térmica'||piece.category==='Casaco'||piece.category==='Corrida')?15:0;
+  return Math.max(10,Math.min(100, Math.round(uses*12 + city*8 + occ*5 + climate*4 + functional)));
+}
+function labelScore(s){return s>=75?'ESSENCIAL':s>=55?'ÚTIL':s>=35?'REAVALIAR':'CANDIDATA A FICAR'}
+const navItems=[['dashboard','Início'],['wardrobe','Peças'],['packing','Mala'],['looks','Looks'],['trip','Roteiro'],['race','Corrida'],['travelmode','Viagem'],['optimizer','Otimizar']];
+
+function buildNav(){
+  const tabs=document.getElementById('tabs'), bottom=document.getElementById('bottomNav');
+  tabs.innerHTML=navItems.map(([id,n],i)=>`<button class="tab ${i===0?'active':''}" data-target="${id}">${n}</button>`).join('');
+  bottom.innerHTML=navItems.slice(0,5).map(([id,n],i)=>`<button class="${i===0?'active':''}" data-target="${id}">${n}</button>`).join('');
+  document.querySelectorAll('[data-target]').forEach(b=>b.onclick=()=>showPanel(b.dataset.target));
+}
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('[data-target]').forEach(b=>b.classList.toggle('active',b.dataset.target===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderDashboard(){
+  const packed=state.pieces.filter(p=>['Na mala','Na mochila','Vestir no avião'].includes(p.status)).length;
+  const pct=state.pieces.length?Math.round(packed/state.pieces.length*100):0;
+  progressText.textContent=pct+'%'; progressBar.style.width=pct+'%';
+  kPieces.textContent=state.pieces.length;kPacked.textContent=packed;kLooks.textContent=state.looks.length;
+  kReview.textContent=state.pieces.filter(p=>utility(p)<35).length;
+  dashTimeline.innerHTML=trip.slice(0,4).map(t=>dayCard(t)).join('');
+}
+function dayCard(t){return `<div class="card day"><strong>${t[0]}</strong><div><div class="city">${t[1]}</div><div class="small">${t[2]}</div></div><span class="pill">planejado</span></div>`}
+function renderTrip(){tripTimeline.innerHTML=trip.map(dayCard).join('')}
+function renderPieces(){
+  pieceGrid.innerHTML=state.pieces.map(p=>{
+    const score=utility(p);
+    return `<div class="card piece">
+      <div class="pieceImg">${p.photo?`<img src="${p.photo}">`:'Adicionar foto'}</div>
+      <div class="pieceBody">
+        <div class="pieceTitle"><h3>${p.name}</h3><button class="btn" onclick="editPiece('${p.id}')">Editar</button></div>
+        <div class="meta">${p.category} • ${p.color}</div>
+        <div class="chips"><span class="chip">${p.climate}</span>${p.cities.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+        <div class="score"><span><span class="small">UTILIDADE</span><br><strong>${score}%</strong></span><span class="pill">${labelScore(score)}</span></div>
+        <div class="statusRow"><select onchange="updateStatus('${p.id}',this.value)">${['Não separado','Separado','Na mala','Na mochila','Vestir no avião','Em uso','Usado / sujo','Disponível'].map(s=>`<option ${s===p.status?'selected':''}>${s}</option>`).join('')}</select><button class="btn danger" onclick="deletePiece('${p.id}')">×</button></div>
+      </div>
+    </div>`
+  }).join('');
+}
+function renderPacking(){
+  let html='';
+  Object.entries(defaultPacking).forEach(([cat,items])=>{
+    html+=`<div class="sectionHead"><div><h2 style="font-size:20px">${cat}</h2></div></div><div class="checkGroup">`;
+    items.forEach(it=>{
+      const key=cat+'|'+it, chk=state.packingChecks[key]?'checked':'';
+      html+=`<label class="checkItem"><input type="checkbox" ${chk} onchange="state.packingChecks['${key.replace(/'/g,"\\'")}']=this.checked;save()"><span>${it}</span><span class="small">${chk?'OK':''}</span></label>`;
+    });
+    html+='</div>';
+  });
+  packingList.innerHTML=html;
+}
+function renderRace(){
+  raceList.innerHTML=raceItems.map(it=>`<label class="checkItem"><input type="checkbox" ${state.raceChecks[it]?'checked':''} onchange="state.raceChecks['${it.replace(/'/g,"\\'")}']=this.checked;save()"><span>${it}</span><span class="small">não despachar</span></label>`).join('');
+}
+function renderHotel(){
+  hotelCheck.innerHTML=hotelItems.map(it=>`<label class="checkItem"><input type="checkbox" ${state.hotelChecks[it]?'checked':''} onchange="state.hotelChecks['${it.replace(/'/g,"\\'")}']=this.checked;save()"><span>${it}</span></label>`).join('');
+}
+function renderLookSelectors(){
+  const cats=['Calça','Camiseta','Manga longa','Camisa/Overshirt','Tricô','Moletom','Térmica','Casaco','Tênis','Acessório'];
+  lookSelectors.innerHTML=cats.map(cat=>{
+    const opts=state.pieces.filter(p=>p.category===cat && p.status!=='Usado / sujo');
+    if(!opts.length)return '';
+    return `<div style="margin-top:8px"><label class="small">${cat}</label><select data-look-cat="${cat}" onchange="renderLookBoard()"><option value="">—</option>${opts.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></div>`
+  }).join('');
+  renderLookBoard();
+}
+function renderLookBoard(){
+  const ids=[...document.querySelectorAll('[data-look-cat]')].map(s=>s.value).filter(Boolean);
+  lookBoard.innerHTML=ids.map(id=>{
+    const p=state.pieces.find(x=>x.id===id);
+    return `<div class="lookTile">${p.photo?`<img src="${p.photo}">`:`<div style="aspect-ratio:1;display:grid;place-items:center">Sem foto</div>`}<div>${p.name}</div></div>`;
+  }).join('');
+}
+function saveLook(){
+  const ids=[...document.querySelectorAll('[data-look-cat]')].map(s=>s.value).filter(Boolean);
+  const name=lookName.value.trim()||`Look ${state.looks.length+1}`;
+  state.looks.push({id:uid(),name,city:lookCity.value,pieceIds:ids});
+  lookName.value=''; save();
+}
+function renderSavedLooks(){
+  savedLooks.innerHTML=state.looks.map(l=>`<div class="card" style="padding:14px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:10px"><div><strong>${l.name}</strong><div class="small">${l.city} • ${l.pieceIds.length} peças</div></div><button class="btn danger" onclick="deleteLook('${l.id}')">Excluir</button></div></div>`).join('')||'<div class="small">Nenhum look salvo ainda.</div>';
+}
+function deleteLook(id){state.looks=state.looks.filter(l=>l.id!==id);save()}
+function renderOptimizer(){
+  optimizerGrid.innerHTML=[...state.pieces].sort((a,b)=>utility(a)-utility(b)).map(p=>{
+    const score=utility(p), uses=state.looks.filter(l=>l.pieceIds.includes(p.id)).length;
+    return `<div class="card sim"><strong>${p.name}</strong><div class="small">${p.category}</div><div style="margin:12px 0;font-size:30px">${score}%</div><div class="small">${uses} look(s) • ${p.cities.length} cidade(s)</div><div style="margin-top:10px"><span class="pill">${labelScore(score)}</span></div><button class="btn" style="margin-top:12px" onclick="simulateRemove('${p.id}')">Testar remover</button></div>`
+  }).join('');
+}
+function simulateRemove(id){
+  const p=state.pieces.find(x=>x.id===id);
+  const affected=state.looks.filter(l=>l.pieceIds.includes(id)).length;
+  const result=affected===0?'✅ Pode tirar sem afetar looks salvos':affected<=1?'🟡 Baixo impacto':'⚠️ Melhor manter';
+  alert(`${p.name}\n\nLooks atuais: ${state.looks.length}\nLooks afetados: ${affected}\nResultado: ${result}\n\nIsso é só uma simulação.`);
+}
+function openPieceModal(){pieceId.value='';pieceModalTitle.textContent='Adicionar peça';['pieceName','pieceColor','pieceCities','pieceOccasions','pieceNotes'].forEach(id=>document.getElementById(id).value='');pieceStatus.value='Não separado';pieceModal.classList.add('open')}
+function closePieceModal(){pieceModal.classList.remove('open')}
+function editPiece(id){
+  const p=state.pieces.find(x=>x.id===id); if(!p)return;
+  pieceId.value=p.id;pieceModalTitle.textContent='Editar peça';pieceName.value=p.name;pieceCategory.value=p.category;pieceColor.value=p.color;pieceLayer.value=p.layer;pieceClimate.value=p.climate;pieceStatus.value=p.status;pieceCities.value=p.cities.join(', ');pieceOccasions.value=p.occasions.join(', ');pieceNotes.value=p.notes||'';pieceModal.classList.add('open')
+}
+async function savePiece(){
+  const id=pieceId.value||uid(); const old=state.pieces.find(x=>x.id===id);
+  let photo=old?.photo||'';
+  const file=piecePhoto.files[0];
+  if(file){photo=await fileToDataURL(file)}
+  const p={id,name:pieceName.value.trim()||'Peça sem nome',category:pieceCategory.value,color:pieceColor.value.trim(),layer:pieceLayer.value,climate:pieceClimate.value,status:pieceStatus.value,cities:pieceCities.value.split(',').map(x=>x.trim()).filter(Boolean),occasions:pieceOccasions.value.split(',').map(x=>x.trim()).filter(Boolean),notes:pieceNotes.value,photo};
+  if(old)Object.assign(old,p); else state.pieces.push(p);
+  piecePhoto.value='';closePieceModal();save();
+}
+function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=reject;
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const max=1100;
+        let w=img.width,h=img.height;
+        if(Math.max(w,h)>max){
+          const ratio=max/Math.max(w,h);
+          w=Math.round(w*ratio); h=Math.round(h*ratio);
+        }
+        const c=document.createElement('canvas');
+        c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(c.toDataURL('image/jpeg',0.78));
+      };
+      img.onerror=reject;
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  })
+}
+function deletePiece(id){if(confirm('Excluir esta peça?')){state.pieces=state.pieces.filter(p=>p.id!==id);state.looks.forEach(l=>l.pieceIds=l.pieceIds.filter(x=>x!==id));save()}}
+function updateStatus(id,status){const p=state.pieces.find(x=>x.id===id);if(p){p.status=status;save()}}
+function renderAll(){renderDashboard();renderTrip();renderPieces();renderPacking();renderRace();renderHotel();renderLookSelectors();renderSavedLooks();renderOptimizer()}
+buildNav();renderAll();
+</script>
+<script>
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script></body>
+</html>
